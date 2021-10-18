@@ -10,7 +10,10 @@ test_font = pygame.font.Font("font/Pixeltype.ttf", 50)
 # Background (no animation)
 sky_surface = pygame.image.load("graphics/Sky.png").convert()
 ground_surface = pygame.image.load("graphics/ground.png").convert()
-text_surface = test_font.render("My game", False, "Black")
+
+score_surf = test_font.render("My game", False, (64, 64, 64))
+score_rect =score_surf.get_rect(center = (400, 50))
+
 
 # Animated objects
 snail_surf = pygame.image.load("graphics/snail/snail1.png").convert_alpha()
@@ -28,18 +31,31 @@ while True:
         #    if player_rect.collidepoint(event.pos):
          #       print("collision")
 
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                print("jump")
+        if event.type == pygame.KEYUP:
+            print("key up")
+
     # Draw all or elements.
     # Update everything.
 
     screen.blit(sky_surface, (0, 0))
     screen.blit(ground_surface, (0, 300))
-    screen.blit(text_surface, (300, 50))
+    pygame.draw.rect(screen, "#c0e8ec", score_rect)
+    pygame.draw.rect(screen, "#c0e8ec", score_rect, 10)
+    screen.blit(score_surf, score_rect)
 
     snail_rect.x -= 4
     if snail_rect.right <= 0:
         snail_rect.left = 800
     screen.blit(snail_surf, snail_rect)
     screen.blit(player_surf, player_rect)
+
+    # keys = pygame.key.get_pressed()
+    # if keys[pygame.K_SPACE]:
+    #     print("jump")
+
 
     #if player_rect.colliderect(snail_rect):
        # print("collision")
