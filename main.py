@@ -1,6 +1,5 @@
-import random
-
 import pygame
+
 from sys import exit
 from random import randint, choice
 
@@ -33,11 +32,6 @@ class Player(pygame.sprite.Sprite):
         if self.rect.bottom >= 300:
             self.rect.bottom = 300
 
-    def update(self):
-        self.player_input()
-        self.apply_gravity()
-        self.animation_state()
-
     def animation_state(self):
         if self.rect.bottom < 300:
             self.image = self.player_jump
@@ -46,6 +40,11 @@ class Player(pygame.sprite.Sprite):
             if self.player_index >= len(self.player_walk):
                 self.player_index = 0
             self.image = self.player_walk[int(self.player_index)]
+
+    def update(self):
+        self.player_input()
+        self.apply_gravity()
+        self.animation_state()
 
 
 class Obstacle(pygame.sprite.Sprite):
@@ -65,7 +64,7 @@ class Obstacle(pygame.sprite.Sprite):
 
         self.animation_index = 0
         self.image = self.frames[self.animation_index]
-        self.rect = self.image.get_rect(midbottom=(random.randint(900, 1100), y_pos))
+        self.rect = self.image.get_rect(midbottom=(randint(900, 1100), y_pos))
 
     def animation_state(self):
         self.animation_index += 0.1
@@ -75,7 +74,7 @@ class Obstacle(pygame.sprite.Sprite):
 
     def update(self):
         self.animation_state()
-        self.rect.x = 6
+        self.rect.x -= 6
         self.destroy()
 
     def destroy(self):
@@ -126,6 +125,7 @@ def collision_sprite():
 
 def player_animation():
     global player_surf, player_index
+
     if player_rect.bottom < 300:
         player_surf = player_jump
     else:
@@ -220,15 +220,15 @@ while True:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and player_rect.bottom >= 300:
                     player_gravity = -20
-
         else:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 game_active = True
+
                 start_time = int(pygame.time.get_ticks() / 1000)
 
         if game_active:
             if event.type == obstacle_timer:
-                obstacle_group.add(Obstacle(choice("fly", "snail", "snail", "snail")))
+                obstacle_group.add(Obstacle(choice(["fly", "snail", "snail", "snail"])))
                 # if randint(0, 2):
                 #     obstacle_rect_list.append(snail_surf.get_rect(bottomright=(randint(900, 1100), 300)))
                 # else:
